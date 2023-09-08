@@ -1,5 +1,7 @@
 ﻿// Read, Eval, Print Loop (REPL) for the TT2 language
 
+using System;
+using System.IO;
 using System.Text;
 
 namespace TeraTerm2;
