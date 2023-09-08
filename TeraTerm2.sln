@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TeraTerm2", "TeraTerm2", "{902D029C-47CA-4C40-A0C4-4BB5802BF271}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{C46F0BFB-754D-42F5-BAD3-868749BF214F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src", "src\src.csproj", "{296DC866-58C8-4A45-8A4F-9975EFB0E17F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C46F0BFB-754D-42F5-BAD3-868749BF214F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C46F0BFB-754D-42F5-BAD3-868749BF214F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C46F0BFB-754D-42F5-BAD3-868749BF214F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C46F0BFB-754D-42F5-BAD3-868749BF214F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{296DC866-58C8-4A45-8A4F-9975EFB0E17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296DC866-58C8-4A45-8A4F-9975EFB0E17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{296DC866-58C8-4A45-8A4F-9975EFB0E17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{296DC866-58C8-4A45-8A4F-9975EFB0E17F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C46F0BFB-754D-42F5-BAD3-868749BF214F} = {902D029C-47CA-4C40-A0C4-4BB5802BF271}
+		{296DC866-58C8-4A45-8A4F-9975EFB0E17F} = {902D029C-47CA-4C40-A0C4-4BB5802BF271}
+	EndGlobalSection
+EndGlobal
