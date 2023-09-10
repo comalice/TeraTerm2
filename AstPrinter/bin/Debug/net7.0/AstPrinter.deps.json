@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "AstPrinter/1.0.0": {
+        "dependencies": {
+          "TeraTerm2": "1.0.0"
+        },
+        "runtime": {
+          "AstPrinter.dll": {}
+        }
+      },
+      "TeraTerm2/1.0.0": {
+        "runtime": {
+          "TeraTerm2.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AstPrinter/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TeraTerm2/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

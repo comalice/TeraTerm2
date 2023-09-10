@@ -1,8 +1,5 @@
 namespace TeraTerm2.test;
 
-using Xunit;
-using TeraTerm2;
-
 public class TestScanner
 {
     // Can parse empty string.
@@ -14,7 +11,7 @@ public class TestScanner
         Assert.Single(tokens);
         Assert.Equal(TokenType.EOF, tokens[0].Type);
     }
-    
+
     // Can parse single character tokens.
     [Fact]
     public void CanParseSingleCharacterTokens()
@@ -48,7 +45,7 @@ public class TestScanner
         Assert.Equal(TokenType.EQEQ, tokens[3].Type);
         Assert.Equal(TokenType.EOF, tokens[4].Type);
     }
-    
+
     // Raises on invalid character sequence.
     [Fact]
     public void RaisesOnInvalidCharacterSequence()
@@ -56,14 +53,27 @@ public class TestScanner
     }
 
     // Can skip comments.
-    
+    [Fact]
+    public void CanSkipSingleLineComments()
+    {
+        var scanner = new Scanner("// A comment\nidentifier");
+        var tokens = scanner.ScanTokens();
+        Assert.Single(tokens);
+        Assert.Equal("identifier", tokens[0].Lexeme);
+        Assert.Equal(TokenType.IDENTIFIER, tokens[0].Type);
+    }
+
     // Can parse variable names.
-    
+    [Fact]
+    public void CanLexVariableNames()
+    {
+    }
+
     // Can parse labels.
-    
+
     // Can parse numbers.
-    
+
     // Can parse strings.
-    
+
     // Can parse keywords.
 }
