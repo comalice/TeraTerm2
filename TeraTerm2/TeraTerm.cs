@@ -1,18 +1,17 @@
 ﻿// Read, Eval, Print Loop (REPL) for the TT2 language
 
-using System;
-using System.IO;
 using System.Text;
 
 namespace TeraTerm2;
 
 /// <summary>
-/// If this looks like a ripoff from Crafting Interpreters, it is.
-///
-/// One cannot argue with elegance.
+///     If this looks like a ripoff from Crafting Interpreters, it is.
+///     One cannot argue with elegance.
 /// </summary>
 public static class TeraTerm
 {
+    private static bool _hadError;
+
     public static void Main(string[] args)
     {
         if (args.Length > 1)
@@ -29,8 +28,6 @@ public static class TeraTerm
             RunPrompt();
         }
     }
-    
-    private static bool _hadError = false;
 
     private static void RunFile(string path)
     {
@@ -57,18 +54,15 @@ public static class TeraTerm
         var tokens = scanner.ScanTokens();
 
         // For now, just print the tokens.
-        foreach (var token in tokens)
-        {
-            Console.WriteLine(token);
-        }
+        foreach (var token in tokens) Console.WriteLine(token);
     }
 
     public static void Error(int line, string message)
     {
-        report(line, "", message);
+        Report(line, "", message);
     }
 
-    private static void report(int line, string where, string message)
+    private static void Report(int line, string where, string message)
     {
         Console.Error.WriteLine("[line " + line + "] Error" + where + ": " + message);
         _hadError = true;

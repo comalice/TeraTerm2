@@ -1,22 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-
 namespace TeraTerm2;
 
 using static TokenType;
 
 public class Scanner
 {
+    private static readonly StringComparer Comparer = StringComparer.OrdinalIgnoreCase;
+
+    private static readonly Dictionary<string, TokenType> Keywords = new(Comparer)
+    {
+        // TODO Commands
+
+        // Operators
+        { "and", AND },
+        { "not", NOT },
+        { "or", OR },
+        { "xor", XOR }
+
+        // TODO System variables
+    };
+
     private readonly string _source;
-    private readonly List<Token> _tokens = new List<Token>();
-    private int _start = 0;
-    private int _current = 0;
+    private readonly List<Token> _tokens = new();
+    private int _current;
     private int _line = 1;
+    private int _start;
 
     public Scanner(string source)
     {
-        this._source = source;
+        _source = source;
     }
 
     public List<Token> ScanTokens()
@@ -33,7 +44,7 @@ public class Scanner
 
     private void scanToken()
     {
-        char c = Advance();
+        var c = Advance();
         switch (c)
         {
             case '(':
@@ -62,40 +73,28 @@ public class Scanner
                 break;
             case '<':
                 if (Match('<'))
-                {
                     // <<
                     AddToken(LTLT);
-                }
                 else if (Match('='))
-                {
                     // <=
                     AddToken(LTE);
-                }
                 else if (Match('>'))
-                {
                     // <>
                     AddToken(LTGT);
-                }
                 else
-                {
                     // <
                     AddToken(LT);
-                }
 
                 break;
             case '>':
                 if (Match('>'))
                 {
                     if (Match('>'))
-                    {
                         // >>>
                         AddToken(GTGTGT);
-                    }
                     else
-                    {
                         // >>
                         AddToken(GTGT);
-                    }
                 }
                 else if (Match('='))
                 {
@@ -135,7 +134,6 @@ public class Scanner
             // Match C style comments
             case '/':
                 if (Match('*'))
-                {
                     while (!IsAtEnd())
                     {
                         // Increment line number.
@@ -147,11 +145,8 @@ public class Scanner
                         Advance();
                         break;
                     }
-                }
                 else
-                {
                     AddToken(SLASH);
-                }
 
                 break;
             case ' ':
@@ -176,26 +171,24 @@ public class Scanner
                     Integer();
                     break;
                 }
-                
+
                 // Handle variable identifiers.
                 if (IsAlphaOrUnderscore(c))
                 {
                     Identifier();
                     break;
                 }
-                else
-                {
-                    // TODO This code reports individual errors. We should probably collect them and report
-                    // them all at once.
-                    TeraTerm.Error(_line, "Unexpected character.");
-                }
+
+                // TODO This code reports individual errors. We should probably collect them and report
+                // them all at once.
+                TeraTerm.Error(_line, "Unexpected character.");
 
                 break;
         }
     }
 
     /// <summary>
-    /// Parse only single line string literals.
+    ///     Parse only single line string literals.
     /// </summary>
     private void StringLiteral()
     {
@@ -203,10 +196,7 @@ public class Scanner
         {
             // Throw if the string does not terminate before a newline.
             // Or throw if we reach the end of the file.
-            if (Peek() == '\n' || IsAtEnd())
-            {
-                TeraTerm.Error(_line, "Unterminated string.");
-            }
+            if (Peek() == '\n' || IsAtEnd()) TeraTerm.Error(_line, "Unterminated string.");
 
             Advance();
         }
@@ -215,32 +205,23 @@ public class Scanner
         Advance();
 
         // Trim the quotes, return the string.
-        string value = _source.Substring(_start + 1, _current - 2);
+        var value = _source.Substring(_start + 1, _current - 2);
         AddToken(STRING, value);
     }
 
     private void Identifier()
     {
-        while (IsAlphaOrUnderscore(Peek()) || IsDigit(Peek()))
-        {
-            Advance();
-        }
+        while (IsAlphaOrUnderscore(Peek()) || IsDigit(Peek())) Advance();
 
         var value = _source.Substring(_start, _current - _start);
         Keywords.TryGetValue(value, out var type);
-        if (type == null)
-        {
-            type = VARIABLE;
-        }
+        if (type == null) type = IDENTIFIER;
         AddToken(type, value);
     }
 
     private void TTLabel()
     {
-        while (IsAlphaOrUnderscore(Peek()) || IsDigit(Peek()))
-        {
-            Advance();
-        }
+        while (IsAlphaOrUnderscore(Peek()) || IsDigit(Peek())) Advance();
 
         var value = _source.Substring(_start, _current);
         AddToken(LABEL, value);
@@ -248,14 +229,11 @@ public class Scanner
 
     private void Integer()
     {
-        while (IsDigit(Peek()))
-        {
-            Advance();
-        }
+        while (IsDigit(Peek())) Advance();
         // We use Int32 because the built-in type is 32-bit.
         try
         {
-            AddToken(INTEGER, Int32.Parse(_source.Substring(_start, _current - _start)));
+            AddToken(INTEGER, int.Parse(_source.Substring(_start, _current - _start)));
         }
         catch (OverflowException)
         {
@@ -265,9 +243,9 @@ public class Scanner
 
     private static bool IsAlphaOrUnderscore(char c)
     {
-        return c is '_' or >= 'a' and <= 'z' or >= 'A' and <= 'Z';    
+        return c is '_' or >= 'a' and <= 'z' or >= 'A' and <= 'Z';
     }
-    
+
     private static bool IsDigit(char c)
     {
         return c is >= '0' and <= '9';
@@ -277,11 +255,11 @@ public class Scanner
     {
         if (IsAtEnd()) return false;
         if (_source[_current] != expected) return false;
-        
+
         _current++;
         return true;
     }
-    
+
     private char Peek()
     {
         if (IsAtEnd()) return '\0';
@@ -293,12 +271,12 @@ public class Scanner
         if (IsAtEnd()) return '\0';
         return _source[_current + 1];
     }
-    
+
     private bool IsAtEnd()
     {
         return _current >= _source.Length;
     }
-    
+
     private char Advance()
     {
         _current++;
@@ -307,21 +285,7 @@ public class Scanner
 
     private void AddToken(TokenType type, object? literal = null)
     {
-        string text = _source.Substring(_start, _current - _start);
+        var text = _source.Substring(_start, _current - _start);
         _tokens.Add(new Token(type, text, literal, _line));
     }
-
-    private static readonly StringComparer Comparer = StringComparer.OrdinalIgnoreCase;
-    private static readonly Dictionary<string, TokenType> Keywords = new Dictionary<string, TokenType>(Comparer)
-    {
-        // TODO Commands
-        
-        // Operators
-        {"and", AND},
-        {"not", NOT},
-        {"or", OR},
-        {"xor", XOR},
-        
-        // TODO System variables
-    };
 }
