@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "generateast"
+version = "0.1.0"
+description = "Generate AST classes in C# for the TeraTerm2 language."
+authors = ["Albert Latham <me@albertlatham.com>"]
+license = "AGPL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
